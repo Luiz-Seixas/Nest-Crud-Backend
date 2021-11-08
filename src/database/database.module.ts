@@ -7,7 +7,7 @@ import { DatabaseService } from './database.service';
   imports: [
     MongooseModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
-        // setando variáveis de ambiente para conecções com o banco baseando-se em casos da node_env estar setada para testes ou não
+        // setando variáveis de ambiente para conexões com o banco baseando-se em casos da node_env estar setada para testes ou não
         uri:
           configService.get<string>('NODE_ENV') === 'test'
             ? configService.get<string>('MONGO_TEST_CONNECTION_URI')

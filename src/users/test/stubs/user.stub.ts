@@ -5,5 +5,6 @@ export const userStub = (): User => {
     name: 'Marcos Vinicius',
     email: 'marquinhos@test.com',
     password: '1234',
+    phone: 11989764532,
   };
 };

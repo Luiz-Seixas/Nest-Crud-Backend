@@ -33,17 +33,6 @@ describe('UsersController', () => {
     await dbConnection.collection('users').deleteMany({});
   });
 
-  describe('getUsers', () => {
-    it('should return an array os users', async () => {
-      //userStubs é uma function que retorna os dados a serem cadastrados para o teste
-      await dbConnection.collection('users').insertOne(userStub());
-      const response = await request(httpServer).get('/users');
-
-      expect(response.status).toBe(200);
-      expect(response.body).toMatchObject([userStub()]);
-    });
-  });
-
   describe('createUser', () => {
     it('should create a new user', async () => {
       const createUserRequest: CreateUserDto = {
@@ -58,10 +47,33 @@ describe('UsersController', () => {
       expect(response.status).toBe(201);
       expect(response.body).toMatchObject(createUserRequest);
 
+      console.log('create User', response.body);
+
       const user = await dbConnection
         .collection('users')
         .findOne({ email: createUserRequest.email });
       expect(user).toMatchObject(createUserRequest);
     });
   });
+
+  describe('getUsers', () => {
+    it('should return an array os users', async () => {
+      //userStubs é uma function que retorna os dados a serem cadastrados para o teste
+      await dbConnection.collection('users').insertOne(userStub());
+      const response = await request(httpServer).get('/users');
+
+      console.log('getUser', response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toMatchObject([userStub()]);
+    });
+  });
+
+  // describe('getUser by id', () => {
+  //   it('should return a user searched by id', async () => {
+  //     // inserindo um usuário previamente para poder buscar nos testes
+  //     await dbConnection.collection('users').insertOne(userStub());
+  //     const response = await request(httpServer).get('/users/')
+  //   })
+  // })
 });
