@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.entity';
-import bcrypt from 'bcrypt';
+import { format } from 'date-fns';
 
 @Injectable()
 export class UsersService {
@@ -12,11 +12,20 @@ export class UsersService {
 
   create(createUserDto: CreateUserDto) {
     const user = new this.userModel(createUserDto);
+
+    const date = new Date();
+    const formattedDate = format(date, 'HH:mm:ss dd/MMM/yyyy');
+    user.createdAt = formattedDate;
+
+    // const phoneFormatted =
+
     return user.save();
   }
 
   findAll() {
-    return this.userModel.find();
+    const users = this.userModel.find();
+
+    return users;
   }
 
   findOne(id: string) {
