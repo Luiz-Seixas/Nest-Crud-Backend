@@ -10,6 +10,14 @@ import { format } from 'date-fns';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
+  formatNumber(str: string) {
+    const format = '(xx) xxxxx-xxxx';
+
+    const number = str.split('');
+
+    return format.replace(/x/g, () => number.shift());
+  }
+
   create(createUserDto: CreateUserDto) {
     const user = new this.userModel(createUserDto);
 
@@ -17,7 +25,7 @@ export class UsersService {
     const formattedDate = format(date, 'HH:mm:ss dd/MMM/yyyy');
     user.createdAt = formattedDate;
 
-    // const phoneFormatted =
+    user.phone = this.formatNumber(user.phone);
 
     return user.save();
   }
@@ -33,6 +41,10 @@ export class UsersService {
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
+    if (updateUserDto.phone) {
+      updateUserDto.phone = this.formatNumber(updateUserDto.phone);
+    }
+
     return this.userModel.findByIdAndUpdate(
       {
         _id: id,
